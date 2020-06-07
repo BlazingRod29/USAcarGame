@@ -1,0 +1,178 @@
+import java.util.Scanner;
+import java.util.ArrayList;
+
+class Main {
+
+    public static final String RESET = "\u001B[0m";
+    public static final String BLACK = "\u001B[30m";
+    public static final String RED = "\u001B[31m";
+    public static final String GREEN = "\u001B[32m";
+    public static final String YELLOW = "\u001B[33m";
+    public static final String BLUE = "\u001B[34m";
+    public static final String PURPLE = "\u001B[35m";
+    public static final String CYAN = "\u001B[36m";
+    public static final String WHITE = "\u001B[37m";
+  
+  public static void main(String[] args) {
+    Scanner xyz = new Scanner(System.in);
+    int days=1;
+    int life=1;
+    int miles=0;
+    int dMiles=2802;
+    int milePH=0;
+    int gas=25;
+    String userInput="";
+    String userChoice="";
+    //===================================
+    ArrayList<String> car=new ArrayList<String>();
+    car.add("  ______     ");
+    car.add(" /|_||_|`.__ ");
+    car.add("|   _    _ _|");
+    car.add(" `-(_)--(_)-' ");
+    //====================================
+    ArrayList<String> ts=new ArrayList<String>();
+    ts.add(" ====___====== ");
+    ts.add("  ==___=====   ");
+    ts.add("    ==__===    ");
+    ts.add("     ~vv~      ");
+    ts.add(" --------------");
+    //====================================
+    ArrayList<String> fl=new ArrayList<String>();
+    fl.add(WHITE+"  ______      ");
+    fl.add(WHITE+" /|_||_|`.__  ");
+    fl.add(BLUE+"====---__--=====");
+    fl.add(BLUE+"----------------");
+    //====================================
+    System.out.println(CYAN+"Following the 'Ultralineamentum'");
+    System.out.println(PURPLE+"Made by: Kayetan Jarzabek");
+    System.out.println(GREEN+"Based on: http://sprott.physics.wisc.edu/pickover/pc/american-line.html");
+    System.out.println(BLUE+"How to play: "+CYAN+"This is a turn based game that is based on getting through the United States. There is an rng aspect that can affect the player. You can choose what to do to get to the end of the game in the fastest amount of time in days. The game is based on the Ultralineamentum line spanning across the U.S. with a total of 2802 miles.");
+    System.out.println();
+    System.out.println(BLACK+"=========================================================================");
+    //=====================================
+    System.out.println(PURPLE+"Starting Point: Ocean Creek, Washington");
+    System.out.println(YELLOW+"Destination: Jupiter, Florida");
+    while(life==1) {
+      System.out.println(BLACK+"=======================================================");
+      System.out.println(YELLOW+"Day: "+days);
+      System.out.println(YELLOW+"Days until fuel tank is empty: "+gas);
+
+      milePH=rngNum100();
+      miles+=milePH;
+
+
+      System.out.println(WHITE+"You have traveled "+milePH+WHITE+" miles forward.");
+
+      // a variable placeholder for rng
+      int varph=0;
+      varph=rngNum100();
+      //==========
+
+      // if statements to help convert the rng into an event
+      if(rngNum50()>=40) {
+        System.out.println(YELLOW+"You had to stop due to a thunderstorm.");
+        miles-=rngNum50();
+      }
+      else if(rngNum100()>=90) {
+        for(int i=0;i<ts.size();i++) {
+          System.out.println(ts.get(i));
+        }
+        System.out.println(RED+"Watch Out! A Tornado!");
+        miles-=rngNum100();
+        if(rngNum50()<=10) {
+          life--;
+        }
+      }
+      else if(varph>=50&&varph<=60) {
+        for(int i=0;i<fl.size();i++) {
+        System.out.println(fl.get(i));
+        }
+        System.out.println(YELLOW+"Watch Out! A Flood!");
+        System.out.println(GREEN+"Would you like to continue with your journey?"+GREEN+ " Yes"+RESET+" or"+RED+" No.");
+        int intph=0;
+        while(intph==0) {
+        userChoice=xyz.nextLine();
+        if(userChoice.equalsIgnoreCase("no")) {
+          intph--;
+          miles+=0;
+          System.out.println(CYAN+"You decided to stay put and didn't get affected by the flood.");
+        }
+        else if(userChoice.equalsIgnoreCase("yes")) {
+          intph--;
+          miles-=rngNum50();
+          System.out.println(RED+"You decided to continue and lose some distance.");
+        }
+        else {
+          System.out.println(YELLOW+"That's not a correct response. Try Again.");
+          System.out.println(YELLOW+"Would you like to continue with your journey?"+GREEN+ "Yes "+RESET+"or"+RED+" No.");
+          } 
+        }
+      }
+      
+      else if(varph>=20&&varph<=40) {
+        System.out.println(GREEN+"You have arrived to a gas station. Would you like to refuel? Yes or No.");
+        
+        int a=0;
+        while(a==0) {
+        userChoice=xyz.nextLine();
+        if(userChoice.equalsIgnoreCase("yes")) {
+         gas+=10;
+         a++;
+        }
+        else if(userChoice.equalsIgnoreCase("no")) {
+        System.out.println(RED+"You decided to continue without refueling.");
+        a--;
+        }
+        else { 
+          System.out.println(YELLOW+"That's not a correct response. Try Again.");
+          System.out.println(YELLOW+"Would you like to continue with your journey?"+GREEN+ " Yes"+RESET+" or"+RED+" No.");
+          }
+        }
+      }
+
+
+
+        else {
+      for(int i=0;i<car.size();i++) {
+        System.out.println(WHITE+car.get(i));
+      }
+        }
+
+      //
+      gas--;
+      System.out.println(WHITE+"You have "+gas+" days of gas left until you are forced to stop.");
+      System.out.println(WHITE+"You are "+(dMiles-miles)+" miles away from Jupiter, Florida.");
+      days++;
+      System.out.println(GREEN+"Hit Enter to Continue");
+      userInput=xyz.nextLine();
+      System.out.println(BLACK+"=======================================================");
+      if(miles>=dMiles) {
+        life++;
+      }
+      if(gas<=0) {
+        life--;
+      }
+
+    }
+    // Endings
+    if(life==2) { //Endgame good
+      System.out.println(GREEN+"You Won! You Made it to the End! It took you "+days+GREEN+" days.");
+    }
+    if(life==0||gas<=0) { //Endgame bad 
+    System.out.println(RED+"Oh No. You didn't make it. You lost at "+days+RED+" days with "+miles+RED+" miles traversed.");
+    }
+    //===========
+
+//RNG methods
+  }
+  public static int rngNum10() {
+    return ((int)(Math.random()*10)+1);
+  }
+  public static int rngNum50() {
+    return ((int)(Math.random()*50)+1);
+  }
+  public static int rngNum100() {
+    return ((int)(Math.random()*100)+1);
+  }
+  //======
+}
